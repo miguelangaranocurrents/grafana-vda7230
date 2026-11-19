@@ -116,7 +116,10 @@ function fieldNameFallback(fields: Set<string>) {
     };
   } else if (fields.has('Time') || fields.has('time')) {
     fallback = (field: Field, frame: DataFrame) => {
-      return frame.meta?.typeVersion == null && field.type === FieldType.time;
+      // Only the field named "time" (case-insensitive) should match, not every time-typed field
+      return (
+        frame.meta?.typeVersion == null && field.type === FieldType.time && field.name.toLowerCase() === 'time'
+      );
     };
   }
 
